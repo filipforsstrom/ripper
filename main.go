@@ -6,6 +6,7 @@ import (
 	"log"
 	"os"
 	"os/exec"
+	"strings"
 
 	"github.com/godbus/dbus/v5"
 )
@@ -43,7 +44,8 @@ func main() {
 				case "org.freedesktop.systemd1.Manager.UnitNew":
 					fmt.Println("Insert")
 					// Execute the whipperCommand on Insert
-					cmd := exec.Command("sh", "-c", whipperCommand)
+					cmdArgs := strings.Fields(whipperCommand)
+					cmd := exec.Command(cmdArgs[0], cmdArgs[1:]...)
 					stdout, err := cmd.StdoutPipe()
 					if err != nil {
 						log.Fatalf("Failed to get stdout pipe: %v", err)

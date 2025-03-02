@@ -37,12 +37,12 @@
         systemd.services.ripper = {
           description = "ripper";
           wantedBy = ["network.target"];
+          path = [pkgs.whipper];
           serviceConfig = {
             ExecStart = "${self.packages.${pkgs.system}.default}/bin/ripper ${config.services.ripper.command}";
             Restart = "always";
             Type = "simple";
             User = config.services.ripper.user;
-            Environment = "PATH=${lib.makeBinPath [pkgs.bash pkgs.coreutils pkgs.whipper]}:/run/current-system/sw/bin";
           };
         };
       };
