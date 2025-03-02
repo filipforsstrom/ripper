@@ -36,12 +36,13 @@
       config = lib.mkIf config.services.ripper.enable {
         systemd.services.ripper = {
           description = "ripper";
-          wantedBy = ["graphical.target"];
+          wantedBy = ["network.target"];
           serviceConfig = {
-            ExecStart = "${self.packages.${pkgs.system}.default}/bin/ripper \"${config.services.ripper.command}\"";
+            ExecStart = "${self.packages.${pkgs.system}.default}/bin/ripper ${config.services.ripper.command}";
             Restart = "always";
             Type = "simple";
             User = config.services.ripper.user;
+            Environment = "PATH=${lib.makeBinPath [pkgs.bash pkgs.coreutils]}:/run/current-system/sw/bin";
           };
         };
       };
