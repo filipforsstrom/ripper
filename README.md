@@ -16,7 +16,7 @@ Add a nix file for options:
 {...}: {
   services.ripper = {
     enable = true;
-    dir = "/dev";
+    command = "whipper cd rip";
     user = "your_user";
   };
 }
