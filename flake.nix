@@ -23,7 +23,7 @@
         enable = lib.mkEnableOption "ripper";
         command = lib.mkOption {
           type = lib.types.str;
-          default = "whipper cd rip --offset 6 --cover-art complete --working-directory /mnt/music/process";
+          default = "''whipper cd rip --offset 6 --cover-art complete --working-directory /mnt/process''";
           description = "Command to execute on CD insert";
         };
         user = lib.mkOption {
@@ -39,7 +39,7 @@
           wantedBy = ["network.target"];
           path = [pkgs.whipper];
           serviceConfig = {
-            ExecStart = ["${self.packages.${pkgs.system}.default}/bin/ripper"] ++ lib.strings.split " " config.services.ripper.command;
+            ExecStart = "${self.packages.${pkgs.system}.default}/bin/ripper ${config.services.ripper.command}";
             Restart = "always";
             Type = "simple";
             User = config.services.ripper.user;
