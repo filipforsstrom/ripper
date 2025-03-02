@@ -42,7 +42,7 @@
             Restart = "always";
             Type = "simple";
             User = config.services.ripper.user;
-            Environment = "PATH=${lib.makeBinPath [pkgs.bash pkgs.coreutils]}:/run/current-system/sw/bin";
+            Environment = "PATH=${lib.makeBinPath [pkgs.bash pkgs.coreutils pkgs.whipper]}:/run/current-system/sw/bin";
           };
         };
       };
