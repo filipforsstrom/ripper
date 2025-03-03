@@ -29,11 +29,32 @@
         user = lib.mkOption {
           type = lib.types.str;
           default = "ripper";
-          description = "User to run the ripper service as";
+          description = "The user under which ripper runs.";
+        };
+
+        group = lib.mkOption {
+          type = lib.types.str;
+          default = "ripper";
+          description = "The group under which ripper runs.";
         };
       };
 
       config = lib.mkIf config.services.ripper.enable {
+        users.users = lib.optionalAttrs (config.services.ripper.user == "ripper") {
+          ripper = {
+            home = "/var/lib/ripper";
+            createHome = true;
+            uid = config.ids.uids.ripper;
+            group = config.services.ripper.group;
+          };
+        };
+
+        users.groups = lib.optionalAttrs (config.services.ripper.group == "ripper") {
+          ripper = {
+            gid = config.ids.gids.ripper;
+          };
+        };
+
         systemd.services.ripper = {
           description = "ripper";
           wantedBy = ["network.target"];
@@ -43,6 +64,8 @@
             Restart = "always";
             Type = "simple";
             User = config.services.ripper.user;
+            Group = config.services.ripper.group;
+            UMask = "0027";
           };
         };
       };
@@ -53,7 +76,7 @@
     in {
       packages.default = gopkg.buildGoModule {
         pname = "ripper";
-        version = "0.1.0";
+        version = "0.2.0";
         src = ./.;
         vendorHash = null;
       };
